@@ -1,5 +1,5 @@
 name: Rebuild VEXORA from official source
-# VEXORA v2.1 grayscale / original SideRays GradientBlinds GhostFibers / direct contact
+# VEXORA v2.1 grayscale / original SideRays GradientBlinds GhostFibers / direct contact / clean contact CSS
 
 on:
   push:

@@ -1,5 +1,5 @@
 name: Rebuild VEXORA from official source
-# Release VEXORA 2.2: full-color portfolio imagery and visual effects; neutral grayscale shell
+# Release VEXORA 2.2 final: full-color photos, dashboard/geometry illustrations, React Bits light effects, accent CTAs; neutral grayscale theme
 # VEXORA v2.1 grayscale / original SideRays GradientBlinds GhostFibers / direct contact / clean contact CSS
 
 on:

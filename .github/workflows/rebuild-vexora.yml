@@ -1,0 +1,60 @@
+name: Rebuild VEXORA from official source
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/rebuild-vexora.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout published website
+        uses: actions/checkout@v4
+        with:
+          path: site
+      - name: Checkout official VEXORA source
+        uses: actions/checkout@v4
+        with:
+          repository: Vexora-Design/pages-source
+          ref: main
+          path: source
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install official dependencies
+        working-directory: source
+        run: npm install --no-audit --no-fund
+      - name: Verify project files and library integrations
+        working-directory: source
+        run: npm run check
+      - name: Build source into sibling Git checkout
+        working-directory: source
+        run: npm run build -- --out ../site
+      - name: Verify static output
+        working-directory: site
+        run: |
+          test -s index.html
+          test -d assets
+          grep -q 'lang="fa"' index.html
+          test -f CNAME
+          test -f .nojekyll
+      - name: Commit and publish built site
+        working-directory: site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Compiled site already up-to-date."
+            exit 0
+          fi
+          git commit -m "Build VEXORA 2.0 from Vexora-Design/pages-source"
+          git push origin HEAD:main
